@@ -19,8 +19,12 @@ RenderCore.prototype.Bezier = function(RenderCore){
         after.x += point.x ;
         return { before: before, after: after };
     }
+    this.handleClick = function(x, y){
+        var p = RenderCore.pointRecompute(x, y)
+        this.addPoint(p.x,p.y);
+    };
     RenderCore.ctx.canvas.addEventListener("click", function(evt){
-        console.log(evt);
+        s.handleClick(evt.layerX, evt.layerY);
     });
     this.loop = function(){
         RenderCore.lineColor = color;
@@ -35,6 +39,11 @@ RenderCore.prototype.Bezier = function(RenderCore){
                 RenderCore.lineColor = "#4477ff";
                 RenderCore.line(points[i], points[i+1]);
                 /* */
+                if(i>1 && 1){
+                    RenderCore.lineColor = "transparent";
+                    RenderCore.fillColor = "rgba(255,255,255,0.3)";    
+                    RenderCore.dot(points[i], 4);
+                }
                 
                 /* Real line */
                 RenderCore.lineColor = "#ff8800";
@@ -47,11 +56,22 @@ RenderCore.prototype.Bezier = function(RenderCore){
             }
         }
     }
+    this.renderMath = function(func, xRes, zoomx, zoomy){
+        zoomx_r = zoomx || 1;
+        zoomy_r = zoomy || zoomx || 1;
+        var i = 0;
+        var max = Math.ceil(RenderCore.config.w/xRes);
+        console.log(RenderCore.config.w, xRes, RenderCore.config.w/xRes);
+        while(i<max){
+            s.addPoint(xRes*i, func(xRes*i*(1/zoomx_r))*zoomy_r);
+            i++;
+        }
+    }
     this.addPoint = function(px, py){
         var i = 0;
         while(i < this.points.lenght){
             if(this.points[i].x == px)
-                return this;
+                return 0;
             i++;
         }
         this.points.push({x: px, y: py});
@@ -63,7 +83,7 @@ RenderCore.prototype.Bezier = function(RenderCore){
             return 0;
         }
         this.points.sort(compare);
-        return this;
+        return 1;
     }
     /* Default points */
     //before start
@@ -73,4 +93,8 @@ RenderCore.prototype.Bezier = function(RenderCore){
     this.addPoint(RenderCore.config.w, 0);
     this.addPoint(RenderCore.config.w+10, 0);
     this.addPoint(RenderCore.config.w+20, 0);
+
+    this.renderMath(function(x){
+        return Math.sin(x);
+    },5,50, 100);
 }
