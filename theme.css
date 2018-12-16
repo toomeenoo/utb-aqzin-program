@@ -1,3 +1,8 @@
+@charset "utf-8";
+/**
+ * Základní vzhled appletu.
+ * Tomáš MOLINARI 2018
+ */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 *{
     margin: 0;
