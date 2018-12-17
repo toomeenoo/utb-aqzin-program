@@ -6,7 +6,7 @@
 RenderCore.prototype.Bezier = function(RenderCore){
     var s = this;//Instance
     var points = [];
-    var mouse = {x:-1, y:-1};
+    var mouse = {x:-9999999999, y:-9999999999};
     var color = "#ff8800";
     this.points = points;
     function pointGetControls(prev, point, next, smoothing){
@@ -37,6 +37,10 @@ RenderCore.prototype.Bezier = function(RenderCore){
     };
     RenderCore.ctx.canvas.addEventListener("click", function(evt){
         s.handleClick(evt.layerX, evt.layerY);
+        /* testing output
+        var p = RenderCore.pointRecompute(evt.layerX, evt.layerY);
+        console.log(s.getValue(p.x));
+        */
     });
     RenderCore.ctx.canvas.addEventListener("mousemove", function(evt){
         mouse = RenderCore.pointRecompute(evt.layerX, evt.layerY);
@@ -78,8 +82,8 @@ RenderCore.prototype.Bezier = function(RenderCore){
         zoomx_r = zoomx || 1;
         zoomy_r = zoomy || zoomx || 1;
         var max = Math.ceil(RenderCore.config.w/xRes)+2;
-        var i = -max;
-        console.log(RenderCore.config.w, xRes, RenderCore.config.w/xRes);
+        var i = -Math.floor(max/2);
+        //console.log(RenderCore.config.w, xRes, RenderCore.config.w/xRes);
         while(i<max){
             s.addPoint(xRes*i, func(xRes*i*(1/zoomx_r))*zoomy_r);
             i++;
@@ -103,19 +107,36 @@ RenderCore.prototype.Bezier = function(RenderCore){
         this.points.sort(compare);
         return 1;
     }
-    /* Default points */
-    //before start
-    this.addPoint(-110, 0);
-    this.addPoint(-100, 0);
-    //At end
-    this.addPoint(RenderCore.config.w+100, 0);
-    this.addPoint(RenderCore.config.w+110, 0);
-    this.addPoint(RenderCore.config.w+120, 0);
-
-    this.renderMath(function(x){
-        return Math.sin(x);
-        //return Math.log(x);
-       // return Math.cos(x);
-       //return 0;
-    },15, 100);
+    this.getValue = function(x){
+        //P = (1−t)^3 P1 + 3(1−t)^2 tP2 +3(1−t)t^2 P3 + t^3 P4
+        var i = 1;
+        while(i < points.length - 2){
+            if(points[i].x <= x && points[i+1].x > x ){
+                if(points[i].x == x)
+                    return points[i].y;
+                var t = (x-points[i].x)/(points[i+1].x - points[i].x);
+                var startC = pointGetControls(points[i-1], points[i], points[i+1], RenderCore.config.smoothing);
+                var endC = pointGetControls(points[i], points[i+1], points[i+2], RenderCore.config.smoothing);
+                return (1-t)*(1-t)*(1-t)*points[i].y + 3*(1-t)*(1-t)*t*startC.after.y + 3*(1-t)*t*t*endC.before.y + t*t*t*points[i+1].y;
+            }
+            i++;
+        }
+    }
+    this.defaultPoints = function(){
+        //Before start
+        this.addPoint(-110, 0);
+        this.addPoint(-100, 0);
+        //At end
+        this.addPoint(RenderCore.config.w+100, 0);
+        this.addPoint(RenderCore.config.w+110, 0);
+        this.addPoint(RenderCore.config.w+120, 0);
+        //Data
+        this.renderMath(RenderCore.config.renderMath, RenderCore.config.dynRes, RenderCore.config.zoomX, RenderCore.config.zoomY);
+    }
+    
+    this.defaultPoints();
+    if(this.Discretize){
+        this.DiscretizeInstance = new this.Discretize(RenderCore, s);
+        RenderCore.registerAction(this.DiscretizeInstance.loop);
+    }
 }

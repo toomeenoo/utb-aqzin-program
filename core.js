@@ -6,7 +6,13 @@
 RenderCore = function(cfg){
     var s = this;//Instance
     this.config = Object.assign(cfg || {}, {
-        smoothing: 1, // 0 - 1
+        smoothing: 0.5, // 0 - 1 (bezier control points distance x [1 = 50%])
+        renderMath: function(x){return Math.sin(x);}, //function y = graph x
+        zoomX: 50, //px coeficient x
+        zoomY: 150, //px coeficient y
+        dynRes: 15, //bezier interpretation points
+        quantInterval: 15,
+        sampling: 25,
     });
     this.ctx = document.getElementById("render").getContext("2d");
     this.beforeLoop = [];
@@ -34,7 +40,7 @@ RenderCore = function(cfg){
          window.requestAnimationFrame(s.loop);
     };
     this.registerAction = function(fn){
-        this.beforeLoop.push(fn);
+        this.beforeLoop.unshift(fn);
     };
     this.lineColor = "#ff0000";
     this.fillColor = "rgba(255,255,255,0.3)";
