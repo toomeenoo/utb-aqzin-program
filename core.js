@@ -111,4 +111,12 @@ RenderCore = function(cfg){
     this.loop();
 }
 
-window.onload = function(){ window.ProgramCore = new RenderCore() };
+window.onload = function(){ 
+    window.ProgramCore = new RenderCore();
+    document.getElementById("quantInterval").addEventListener("change", function(){
+        window.ProgramCore.config.quantInterval = parseInt(this.value);
+    });
+    document.getElementById("sampling").addEventListener("change", function(){
+        window.ProgramCore.config.sampling = parseInt(this.value);
+    });
+};
