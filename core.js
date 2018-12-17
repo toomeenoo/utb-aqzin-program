@@ -17,6 +17,8 @@ RenderCore = function(cfg){
         s.ctx.beginPath();
         s.ctx.moveTo(0, s.config.ny);
         s.ctx.lineTo(s.config.w, s.config.ny);
+        s.ctx.moveTo( s.config.nx, 0);
+        s.ctx.lineTo( s.config.nx, s.config.h);
         s.ctx.stroke();
         s.ctx.closePath();
         var i = 0;
@@ -56,13 +58,14 @@ RenderCore = function(cfg){
         s.ctx.stroke();
         s.ctx.closePath();
     }
-    this.crossHair = function(point){
+    this.crossHair = function(point, size){
+        size = size || 5;
         s.ctx.strokeStyle = s.lineColor;
         s.ctx.beginPath();
-        s.ctx.moveTo(point.x+s.config.nx+5, s.config.ny-point.y);
-        s.ctx.lineTo(point.x+s.config.nx-5, s.config.ny-point.y);
-        s.ctx.moveTo(point.x+s.config.nx, s.config.ny-point.y+5);
-        s.ctx.lineTo(point.x+s.config.nx, s.config.ny-point.y-5);
+        s.ctx.moveTo(point.x+s.config.nx+size, s.config.ny-point.y);
+        s.ctx.lineTo(point.x+s.config.nx-size, s.config.ny-point.y);
+        s.ctx.moveTo(point.x+s.config.nx, s.config.ny-point.y+size);
+        s.ctx.lineTo(point.x+s.config.nx, s.config.ny-point.y-size);
         s.ctx.stroke();
         s.ctx.closePath();
     }
@@ -79,14 +82,15 @@ RenderCore = function(cfg){
     this.resetSizes = function(){
         s.config.w = s.ctx.canvas.clientWidth;
         s.config.h = s.ctx.canvas.clientHeight;
-        s.config.nx = 0.5;
-        s.config.ny = (Math.round(s.ctx.canvas.clientHeight/2) + 50 - (Math.round(s.ctx.canvas.clientHeight/2) % 50))+0.5;
+        s.config.nx = 50.5;
+        //s.config.ny = (Math.round(s.ctx.canvas.clientHeight/2) + 50 - (Math.round(s.ctx.canvas.clientHeight/2) % 50))+0.5;
+        s.config.ny = Math.round(s.ctx.canvas.clientHeight/2)+25+0.5;
         s.ctx.canvas.width = s.ctx.canvas.clientWidth;
         s.ctx.canvas.height = s.ctx.canvas.clientHeight;
     }
     this.pointRecompute = function(x, y){
         return {
-            x: x+s.config.nx,
+            x: x-s.config.nx,
             y: (y-s.config.ny)*-1,
         }
     }

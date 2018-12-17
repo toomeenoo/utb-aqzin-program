@@ -20,6 +20,7 @@ canvas{
     background-color: #303030;
     width: 100%;
     background-image: url('grid.jpg');
+    background-position: left center;
 }
 footer{
     background-color: #2c2c2c;
