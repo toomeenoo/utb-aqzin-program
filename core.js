@@ -124,6 +124,7 @@ window.onload = function(){
         });
     }
     mapConfigRN("quantInterval", "quantInterval", window.ProgramCore.config);
+    mapConfigRN("sampling", "sampling", window.ProgramCore.config);
     mapConfigRN("def", "dynRes", window.ProgramCore.config);
     mapConfigRN("zoomx", "zoomX", window.ProgramCore.config);
     mapConfigRN("zoomy", "zoomY", window.ProgramCore.config);
