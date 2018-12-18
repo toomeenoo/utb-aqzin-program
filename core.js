@@ -6,7 +6,7 @@
 RenderCore = function(cfg){
     var s = this;//Instance
     this.config = Object.assign(cfg || {}, {
-        smoothing: 0.5, // 0 - 1 (bezier control points distance x [1 = 50%])
+        smoothing: 50, // 0 - 100 (bezier control points distance x [100 = 50%])
         renderMath: function(x){return Math.sin(x);}, //function y = graph x
         zoomX: 50, //px coeficient x
         zoomY: 150, //px coeficient y
@@ -113,10 +113,43 @@ RenderCore = function(cfg){
 
 window.onload = function(){ 
     window.ProgramCore = new RenderCore();
-    document.getElementById("quantInterval").addEventListener("change", function(){
-        window.ProgramCore.config.quantInterval = parseInt(this.value);
-    });
-    document.getElementById("sampling").addEventListener("change", function(){
-        window.ProgramCore.config.sampling = parseInt(this.value);
+    function mapConfigRN(id, key, config){
+        document.getElementById(id+"R").addEventListener("change", function(){
+            config[key] = parseInt(this.value);
+            document.getElementById(id+"N").value = parseInt(this.value);
+        });
+        document.getElementById(id+"N").addEventListener("change", function(){
+            config[key] = parseInt(this.value);
+            document.getElementById(id+"R").value = parseInt(this.value);
+        });
+    }
+    mapConfigRN("quantInterval", "quantInterval", window.ProgramCore.config);
+    mapConfigRN("def", "dynRes", window.ProgramCore.config);
+    mapConfigRN("zoomx", "zoomX", window.ProgramCore.config);
+    mapConfigRN("zoomy", "zoomY", window.ProgramCore.config);
+    mapConfigRN("smoothing", "smoothing", window.ProgramCore.config);
+
+    document.getElementById("input_submit").addEventListener("click", function(){
+        var fname = document.getElementById("math").value;
+        var fn = null;
+        switch(fname){
+            case "sin":
+                fn = function(x){return Math.sin(x);}
+            break;
+            case "cos":
+                fn = function(x){return Math.cos(x);}
+            break;
+            case "const":
+                fn = function(x){return 0;}
+            break;
+            case "linup":
+                fn = function(x){return x;}
+            break;
+            case "lindn":
+                fn = function(x){return -1 * x;}
+            break;
+        }
+        window.ProgramCore.config.renderMath = fn;
+        window.ProgramCore.BezierInstance.defaultPoints();
     });
 };

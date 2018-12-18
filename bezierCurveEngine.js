@@ -10,6 +10,7 @@ RenderCore.prototype.Bezier = function(RenderCore){
     var color = "#ff8800";
     this.points = points;
     function pointGetControls(prev, point, next, smoothing){
+        smoothing /= 100;
         var before = {x: ((point.x-prev.x)*smoothing/2), y: 0};
         var after = {x: ((next.x-point.x)*smoothing/2), y: 0}
         var rise = 1/((prev.x - next.x)/(prev.y - next.y));
@@ -60,12 +61,15 @@ RenderCore.prototype.Bezier = function(RenderCore){
                 RenderCore.lineColor = "#4477ff";
                 RenderCore.line(points[i], points[i+1]);
                 /* */
+
+                /* Definition points circles */
                 var dist = Math.sqrt(Math.pow(Math.abs(mouse.x-points[i].x),2)+Math.pow(Math.abs(mouse.y-points[i].y),2));
                 if(dist < 150){
                     RenderCore.lineColor = "transparent";
                     RenderCore.fillColor = "rgba(255,255,255,"+1/(dist/8)+")";    
                     RenderCore.dot(points[i], 4);
                 }
+                /* */
                 
                 /* Real line */
                 RenderCore.lineColor = "#ff8800";
@@ -81,7 +85,7 @@ RenderCore.prototype.Bezier = function(RenderCore){
     this.renderMath = function(func, xRes, zoomx, zoomy){
         zoomx_r = zoomx || 1;
         zoomy_r = zoomy || zoomx || 1;
-        var max = Math.ceil(RenderCore.config.w/xRes)+2;
+        var max = Math.ceil(RenderCore.config.w/xRes)+10;
         var i = -Math.floor(max/2);
         //console.log(RenderCore.config.w, xRes, RenderCore.config.w/xRes);
         while(i<max){
@@ -123,14 +127,7 @@ RenderCore.prototype.Bezier = function(RenderCore){
         }
     }
     this.defaultPoints = function(){
-        //Before start
-        this.addPoint(-110, 0);
-        this.addPoint(-100, 0);
-        //At end
-        this.addPoint(RenderCore.config.w+100, 0);
-        this.addPoint(RenderCore.config.w+110, 0);
-        this.addPoint(RenderCore.config.w+120, 0);
-        //Data
+        points = this.points = [];
         this.renderMath(RenderCore.config.renderMath, RenderCore.config.dynRes, RenderCore.config.zoomX, RenderCore.config.zoomY);
     }
     

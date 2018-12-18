@@ -16,24 +16,72 @@ html, body{
 }
 canvas{
     border: none;
-    height: calc(100% - 35px);
+    height: 100%;
     background-color: #303030;
-    width: 100%;
+    width: calc(100% - 320px);
     background-image: url('grid.jpg');
     background-position: left center;
+    float: left;
 }
-footer{
+aside{
     background-color: #2c2c2c;
-    height: 35px;
+    width:320px;
+    height: 100%;
     font-size: 12px;
     color: #e0e0e0;
+    float: right;
+    box-sizing: border-box;
+    padding:10px;
+}
+h1, h2, h3, h4, h5, h6{
+    margin-bottom: 10px;
 }
 div.input{
-    display: inline-block;
+    display: block;
     padding: 6px 10px 0 10px;
+    margin-bottom: 8px;
 }
-div.input label, div.input input{
-    height: 20px;
-    line-height: 20px;
-    vertical-align: middle;
+div.input::after{
+    content: "";
+    display: block;
+    clear: both;
+    width: 100%;
+    padding-top: 8px;
+    border-bottom: #505050 1px solid;
+}
+div.input p{
+    margin-bottom: 10px;
+}
+div.input-data input{
+    border: none;
+    height: 22px;
+    display: block;
+}
+div.input-data .opt-range{
+    width: 180px;
+    float: left;
+} 
+div.input-data .opt-num{
+    width: 65px;
+    line-height: 22px;
+    box-sizing: border-box;
+    float: right;
+    padding: 0 0 0 5px;
+    background-color: #e0e0e0;
+}
+div.input-data select{
+    width: 100%;
+    padding: 4px;
+    border: none;
+    background-color: #e0e0e0;
+}
+div.clear{
+    clear: both;
+}
+#input_submit{
+    margin: 0 10px 0 10px;
+    width: 280px;
+    padding: 4px;
+    border: none;
+    background-color: #e0e0e0;
 }

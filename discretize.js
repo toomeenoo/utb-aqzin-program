@@ -6,16 +6,17 @@
 RenderCore.prototype.Bezier.prototype.Discretize = function(RenderCore, BezierInstance){
     this.loop = function(){
         var max = Math.ceil(RenderCore.config.w/RenderCore.config.sampling)+2;
-        //Začátek 0 anebo -
-        var i = 0;//-Math.floor(max/2);
+        var i = 0;
         while(i<max){
             var x = i*RenderCore.config.sampling;
-            //Math perfect sampling recognition
+
+            /* Math perfect sampling recognition */
             var y = Math.round(BezierInstance.getValue(x)/RenderCore.config.quantInterval)*RenderCore.config.quantInterval;
             
-            //Standart sampling recognition (round down)
-            //var y = BezierInstance.getValue(i*RenderCore.config.sampling);
-            //y = y - (y%RenderCore.config.quantInterval);
+            /* Standart sampling recognition (round down) *
+            var y = BezierInstance.getValue(i*RenderCore.config.sampling);
+            y = y - (y%RenderCore.config.quantInterval);
+            /*  */
 
             /* render point *
             RenderCore.lineColor = "#00ff88";
@@ -27,7 +28,6 @@ RenderCore.prototype.Bezier.prototype.Discretize = function(RenderCore, BezierIn
             RenderCore.lineColor = "#003388";
             if(!(isNaN(j) || j > 999999999 || j < -999999999)){
                 while(j != 0){
-                    
                     RenderCore.line({y:j*RenderCore.config.quantInterval, x:x}, {y:j*RenderCore.config.quantInterval, x:x+RenderCore.config.sampling});
                     j = j > 0 ? j-1 : j+1;
                 }

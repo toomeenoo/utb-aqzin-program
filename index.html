@@ -6,22 +6,72 @@
 <link rel="stylesheet" type="text/css" href="theme.css">
 <script src="core.js"></script>
 <script src="bezierCurveEngine.js"></script>
-<script src="discretize.js".js"></script>
+<script src="discretize.js"></script>
 </head>
 
 <body>
     <canvas id="render">
         Your browser is not supported
     </canvas>
-    <footer class="controls">
+    <aside class="controls">
+        <h2>Nastavení</h2>
+        <h3>Výstup</h3>
+        <div class="input" title="Kvantování">
+            <p>Šířka kvantizačního intervalu &Delta; T</p>
+            <div class="input-data">
+                <input type="range" id="quantIntervalR" min="5" max="100" value="15" class="opt-range">
+                <input type="number" id="quantIntervalN" min="5" max="100" value="15" class="opt-num">
+            </div>
+        </div>
+        <div class="input" title="Vzorkování">
+            <p>Vzorkovací perioda</p>
+            <div class="input-data">
+                <input type="range" id="samplingR" min="5" max="100" value="25" class="opt-range">
+                <input type="number" id="samplingN" min="5" max="100" value="15" class="opt-num">
+            </div>    
+        </div> 
+        <h3>Vstup</h3>
         <div class="input">
-            <label>&Delta; T</label>
-            <input type="range" id="quantInterval" min="5" max="100" value="15">
+            <p>Definiční interval Bezierovy křivky</p>
+            <div class="input-data">
+                <input type="range" id="defR" min="5" max="100" value="25" class="opt-range">
+                <input type="number" id="defN" min="5" max="100" value="25" class="opt-num">
+            </div>
         </div>
         <div class="input">
-            <label>Vzorkování</label>
-            <input type="range" id="sampling" min="5" max="100" value="25">
-        </div> 
-    </footer>
+            <p>Přiblížení (koeficient) osi X</p>
+            <div class="input-data">
+                <input type="range" id="zoomxR" min="10" max="300" value="50" class="opt-range">
+                <input type="number" id="zoomxN" min="10" max="300" value="50" class="opt-num">
+            </div>    
+        </div>
+        <div class="input">
+            <p>Přiblížení (koeficient) osi Y</p>
+            <div class="input-data">
+                <input type="range" id="zoomyR" min="10" max="300" value="150" class="opt-range">
+                <input type="number" id="zoomyN" min="10" max="300" value="150" class="opt-num">
+            </div>    
+        </div>
+        <div class="input">
+            <p>Zaoblení Bezierovy křivky (%)</p>
+            <div class="input-data">
+                <input type="range" id="smoothingR" min="0" max="100" value="50" class="opt-range">
+                <input type="number" id="smoothingN" min="0" max="100" value="50" class="opt-num">
+            </div>    
+        </div>
+        <div class="input">
+            <p>Výchozí funkce</p>
+            <div class="input-data">
+                <select id="math">
+                    <option value="sin">y = Sin x</option>
+                    <option value="cos">y = Cos x</option>
+                    <option value="const">y = 0</option>
+                    <option value="linup">y = x</option>
+                    <option value="lindn">y = -x</option>
+                </select>
+            </div>    
+        </div>  
+        <button type="button" id="input_submit"> Generovat vstup </button>
+    </aside>
 </body>
 </html>
